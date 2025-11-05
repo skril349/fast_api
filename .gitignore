@@ -1,0 +1,47 @@
+# Entorn virtual
+.venv/
+venv/
+
+# Fitxers de Python compilats
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fitxers de configuració locals
+.env
+*.env
+
+# Fitxers de logs
+*.log
+
+# Fitxers temporals i de sistema
+.DS_Store
+Thumbs.db
+
+# Configuracions d’IDE
+.vscode/
+.idea/
+*.swp
+
+# Dependències de tests o coverage
+htmlcov/
+.coverage
+*.cover
+*.py,cover
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# Fitxers generats per builds o distros
+build/
+dist/
+*.egg-info/
+
+# Jupyter Notebooks i sortides
+.ipynb_checkpoints/
+
+# Fitxers del sistema operatiu
+*.bak
+*.tmp
