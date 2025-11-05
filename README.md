@@ -51,3 +51,14 @@ pip install "fastapi[standard]"
 2. **Uvicorn** – servidor **ASGI** lleuger i altament performant utilitzat per executar aplicacions FastAPI.  
 3. **Pydantic** – eina per a la **validació i gestió de dades** basada en tipus de Python.  
 4. **Starlette** – motor web subjacent que proporciona la base d’ASGI, rutes, middleware i gestió d’esdeveniments.
+
+### 4. Documentació 
+
+Accedim a la documentació de diverses maneres:
+
+```
+/docs
+/redoc
+/openapi.json
+
+```
