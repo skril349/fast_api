@@ -6,7 +6,7 @@ class Item(BaseModel):
     item_id: int
     price: float
 
-    @field_validator("item_id")
+    @field_validator("item_id", mode="after")
     def check_positive(cls,value:int):
         if value < 0:
             raise ValueError("Item ID debe ser positivo")
