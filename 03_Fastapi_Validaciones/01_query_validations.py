@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Query
 from typing import Annotated
+from pydantic import AfterValidator
 
 app = FastAPI()
 
@@ -29,3 +30,15 @@ async def read_objects(q: Annotated[int | None,Query(gt=3)] = None):
         results.update({"q":q})
     return results
 
+
+def check_valid_id(id: str):
+    if id % 2 != 0:
+        raise ValueError("Necesita ser par")
+    return id
+
+@app.get("/check-id/")
+async def check_id(q: Annotated[int | None,AfterValidator(check_valid_id)] = None):
+    results: dict = {"mensaje": "Acceso a get(check_id)"}
+    if q:
+        results.update({"q":q})
+    return results
