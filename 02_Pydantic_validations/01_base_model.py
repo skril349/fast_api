@@ -5,7 +5,7 @@ class User(BaseModel):
     id: int
     nombre:str
     email:str
-    edad:int
+    edad:int | None = None
     activo:bool
 
 app = FastAPI()
