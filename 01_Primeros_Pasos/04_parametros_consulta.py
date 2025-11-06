@@ -11,5 +11,11 @@ cars_list : list[dict] = [
 
 # http://localhost:8000/cars/?limit=2&skip=2
 @app.get("/cars/")
-async def get_cars(skip: int = 0 , limit:int = 10):
+async def get_cars(skip: int = 0 , limit:int = 10, optional: str | None = None):
+    if optional:
+        return{
+            "list":cars_list[skip:skip+limit],
+            "optional": optional
+        }
+    
     return cars_list[skip:skip+limit]
