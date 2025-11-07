@@ -15,8 +15,22 @@ app = FastAPI()
 # lt : less than
 # le : less than or equal
 
+# METADATA
+
+# title
+# description
+# alias
+# deprecated
+
 @app.get("/items/")
-async def read_items(q: Annotated[str | None,Query(min_length=3, max_length=20)] = None):
+async def read_items(q: Annotated[
+    str | None,
+    Query(min_length=3,
+           max_length=20,
+           title="Query",
+           description="lo que se va a buscar",
+           alias="item-query")
+    ] = None):
     results: dict = {"mensaje": "Acceso a get(read_items)"}
     if q:
         results.update({"q":q})
@@ -37,7 +51,10 @@ def check_valid_id(id: str):
     return id
 
 @app.get("/check-id/")
-async def check_id(q: Annotated[int | None,AfterValidator(check_valid_id)] = None):
+async def check_id(q: Annotated[
+    int | None,
+    AfterValidator(check_valid_id)
+    ] = None):
     results: dict = {"mensaje": "Acceso a get(check_id)"}
     if q:
         results.update({"q":q})
