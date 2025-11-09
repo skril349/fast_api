@@ -1,0 +1,4 @@
+# - Reto, agrega "search" str opcional a FilterPArams, implementa la logica antes 
+# del return para buscar
+# si la str de search esta IN titulo (evita sorpresas haciendo todo minusculas!)
+# - Investiga response_model de FastAPI y agrega el tipado a la respuesta de tu metodo get.
