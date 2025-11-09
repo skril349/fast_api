@@ -1,0 +1,8 @@
+# Crear nueva tarea
+# Crea un endpoint para post "/tareas/" recibira una variacion de Tarea en el body
+# Una variacion por que no va a recibir el ID, de eso se encarga mi backend
+# SOLUCION: Crear modelos distintos para Crear Tareas, y Tarea (respuesta) con una TareaBase
+# Crear una forma de creacion de ids que nos ayude a prevenir problemas de id's repetidos
+# Sugerido: usar un generador de ids con itertools count
+# Implementar la creacion de la tarea y agregarla a fake_db
+# Al crear la tarea retornarla, tipar el response_model usar status_code de 201

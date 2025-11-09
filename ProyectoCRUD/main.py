@@ -1,11 +1,22 @@
 from pydantic import BaseModel, Field
 from typing import Annotated, Literal
 from fastapi import FastAPI, Depends, HTTPException
+from itertools import count
 
-class Tarea(BaseModel):
-    id: Annotated[int, Field(gt=0)]
+id_generator = count(start=1)
+def obtener_nuevo_id() -> int:
+    return next(id_generator)
+
+class TareaBase(BaseModel):
     titulo: Annotated[str, Field(min_length=3)]
     estado: Literal["pendiente", "completado"] = "pendiente"
+
+class TareaCreate(TareaBase):
+    pass 
+
+class Tarea(TareaBase):
+    id: Annotated[int, Field(gt=0)]
+    
 
 class FilterParams(BaseModel):
     limit: Annotated[int, Field(ge=1)] = 5
@@ -14,16 +25,16 @@ class FilterParams(BaseModel):
     search: str | None = None
 
 fake_db: list[Tarea] = [
-    Tarea(id=1, titulo="Estudiar Python", estado="pendiente"),
-    Tarea(id=2, titulo="Lavar la ropa", estado="completado"),
-    Tarea(id=3, titulo="Leer un libro", estado="pendiente"),
-    Tarea(id=4, titulo="Ir al gimnasio", estado="completado"),
-    Tarea(id=5, titulo="Comprar comida", estado="pendiente"),
-    Tarea(id=6, titulo="Limpiar el cuarto", estado="pendiente"),
-    Tarea(id=7, titulo="Pagar cuentas", estado="completado"),
-    Tarea(id=8, titulo="Llamar a mamá", estado="pendiente"),
-    Tarea(id=9, titulo="Revisar correo", estado="pendiente"),
-    Tarea(id=10, titulo="Lavar carro", estado="pendiente"),
+    Tarea(id=obtener_nuevo_id(), titulo="Estudiar Python", estado="pendiente"),
+    Tarea(id=obtener_nuevo_id(), titulo="Lavar la ropa", estado="completado"),
+    Tarea(id=obtener_nuevo_id(), titulo="Leer un libro", estado="pendiente"),
+    Tarea(id=obtener_nuevo_id(), titulo="Ir al gimnasio", estado="completado"),
+    Tarea(id=obtener_nuevo_id(), titulo="Comprar comida", estado="pendiente"),
+    Tarea(id=obtener_nuevo_id(), titulo="Limpiar el cuarto", estado="pendiente"),
+    Tarea(id=obtener_nuevo_id(), titulo="Pagar cuentas", estado="completado"),
+    Tarea(id=obtener_nuevo_id(), titulo="Llamar a mamá", estado="pendiente"),
+    Tarea(id=obtener_nuevo_id(), titulo="Revisar correo", estado="pendiente"),
+    Tarea(id=obtener_nuevo_id(), titulo="Lavar carro", estado="pendiente"),
 ]
 
 app = FastAPI()
@@ -53,9 +64,16 @@ async def get_tareas(filtros: FilterParams = Depends()):
     return tareas_filtradas[inicio:fin]
 
 
-@app.get("/tareas/{id}")
+@app.get("/tareas/{id}", response_model= Tarea)
 def get_tarea(id: int):
     for tarea in fake_db:
         if tarea.id == id:
             return tarea    
     raise HTTPException(status_code=404, detail = "No existe el id")
+
+@app.post("/tareas/",response_model= Tarea, status_code=201)
+async def post_tarea(tarea:TareaCreate):
+    nuevo_id : int = obtener_nuevo_id()
+    nueva_tarea: Tarea = Tarea(id=nuevo_id, **tarea.model_dump())
+    fake_db.append(nueva_tarea)
+    return nueva_tarea
