@@ -1,0 +1,17 @@
+# Clase 1: Crea una clase (Modelo de pydantic) de Tarea, con id numerico mayor a cero
+# con titulo string longitud minima de 3 y estado string que pueda ser unicamente 
+# pendiente o completado (default pendiente)
+# Crea una fake_db que sea una lista con al menos 10 Tareas
+
+# fake_db: list[Tarea] = [
+#     Tarea(id=1, titulo= "Estudiar Python", estado= "pendiente"),
+#     Tarea(id=2, titulo= "Lavar la ropa", estado= "completado"),
+#     Tarea(id=3, titulo= "Leer un libro", estado= "pendiente"),
+#     Tarea(id=4, titulo= "Ir al gimnasio", estado= "completado"),
+#     Tarea(id=5, titulo= "Comprar comida", estado= "pendiente"),
+#     Tarea(id=6, titulo= "Limpiar el cuarto", estado= "pendiente"),
+#     Tarea(id=7, titulo= "Pagar cuentas", estado= "completado"),
+#     Tarea(id=8, titulo= "Llamar a mamá", estado= "pendiente"),
+#     Tarea(id=9, titulo= "Revisar correo", estado= "pendiente"),
+#     Tarea(id=10, titulo= "Lavar carro", estado= "pendiente"),
+# ]

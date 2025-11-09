@@ -1,0 +1,8 @@
+# - Crea el app de FastAPI, y la ruta "/tareas/" con el metodo get, prueba que
+# regrese toda la lista de tareas rapidamente con el explorador.
+
+# - Crea un modelo de filtros (FilterParams) con "limit" int mayor o igual a 1 (default 5)
+# "offset" mayor o igual a cero (default 0) y "estado" opcional pendiente/completado 
+
+# - Utiliza el estado para filtrar las tareas y despues de filtrarlas utiliza offset y limit 
+# para devolver las correctas.
