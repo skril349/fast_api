@@ -11,12 +11,16 @@ class TareaBase(BaseModel):
     titulo: Annotated[str, Field(min_length=3)]
     estado: Literal["pendiente", "completado"] = "pendiente"
 
+class Tarea(TareaBase):
+    id: Annotated[int, Field(gt=0)]
+
 class TareaCreate(TareaBase):
     pass 
 
-class Tarea(TareaBase):
-    id: Annotated[int, Field(gt=0)]
-    
+class TareaUpdate(BaseModel):
+    titulo: Annotated[str, Field(min_length=3)]
+    estado: Literal["pendiente", "completado"]
+
 
 class FilterParams(BaseModel):
     limit: Annotated[int, Field(ge=1)] = 5
@@ -77,3 +81,12 @@ async def post_tarea(tarea:TareaCreate):
     nueva_tarea: Tarea = Tarea(id=nuevo_id, **tarea.model_dump())
     fake_db.append(nueva_tarea)
     return nueva_tarea
+
+@app.put("/tareas/{id}", response_model= Tarea)
+async def edit_tarea(id:int, datos: TareaUpdate):
+    for i, tarea in enumerate(fake_db):
+        if tarea.id == id:
+            tarea_actualizada = tarea.model_copy(update=datos.model_dump())
+            fake_db[i] = tarea_actualizada
+            return tarea_actualizada
+    raise HTTPException(status_code=404,detail = "No existe el id")

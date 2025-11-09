@@ -1,0 +1,6 @@
+# Actualizar tarea existente
+# Crear endpoint put "/tareas/{id}" usar response_model
+# recibe id de path parameter y datos como un nuevo modelo TareaUpdate
+# Buscar dentro de mi fake_db y actualizar tarea, no se presionen... 
+# yo utilizare model_copy, model_dump y lo explicare.
+# Si no se encuentra la tarea usar HTTPException con codigo 404 y detail
