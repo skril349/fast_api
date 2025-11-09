@@ -90,3 +90,12 @@ async def edit_tarea(id:int, datos: TareaUpdate):
             fake_db[i] = tarea_actualizada
             return tarea_actualizada
     raise HTTPException(status_code=404,detail = "No existe el id")
+
+
+@app.delete("/tareas/{id}", response_model=Tarea)
+async def delete_tarea(id: int):
+    for i, tarea in enumerate(fake_db):
+        if tarea.id == id:
+            tarea_eliminada = fake_db.pop(i)
+            return tarea_eliminada
+    raise HTTPException(status_code=404, detail="No existe el id")
