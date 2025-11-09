@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Annotated, Literal
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 
 class Tarea(BaseModel):
     id: Annotated[int, Field(gt=0)]
@@ -51,3 +51,11 @@ async def get_tareas(filtros: FilterParams = Depends()):
     inicio = filtros.offset
     fin = filtros.offset + filtros.limit
     return tareas_filtradas[inicio:fin]
+
+
+@app.get("/tareas/{id}")
+def get_tarea(id: int):
+    for tarea in fake_db:
+        if tarea.id == id:
+            return tarea    
+    raise HTTPException(status_code=404, detail = "No existe el id")

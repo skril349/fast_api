@@ -1,0 +1,4 @@
+# Obtener tarea específica:
+# Crea un endpoint get "/tareas/{id}" donde recibas un id de tipo entero como path parameter
+# Este debe retornar la tarea especifica o un HTTPException de FastAPI con codigo 404
+# y detail que indique que no existe la tarea
