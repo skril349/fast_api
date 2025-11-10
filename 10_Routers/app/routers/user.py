@@ -1,8 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from app.core import dependencies
 
 router = APIRouter(
     prefix="/users",
     tags=["USERS"],
+    dependencies=[Depends(dependencies.log_request)],
     responses={404: {"Description":"Not found"}}
 )
 
