@@ -8,9 +8,9 @@
 ### Oauth 2 flujo de password + Bearer token
 ###
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from typing import Annotated
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -48,11 +48,12 @@ fake_users_db: dict={
 
 
 def fake_hash_password(password:str) -> str:
-    return "fakehashed" + password
+    return "fake_hashed_" + password
 
 def get_user(db: dict, username: str) -> UserInDB | None:
-    if username in db:
-        return UserInDB(**db["username"]) # **db... desestructuració per mostrar les dades de User
+    user_data = db.get(username)
+    if user_data:
+        return UserInDB(**user_data) # **db... desestructuració per mostrar les dades de User
     return None
 
 def fake_decode_token(token:str) -> UserInDB | None:
@@ -61,7 +62,25 @@ def fake_decode_token(token:str) -> UserInDB | None:
 
 async def get_current_user(token: Annotated[str,Depends(oauth2_scheme)]):
     user = fake_decode_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     return user
+
+
+@app.post("/token")
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    user_dict = fake_users_db.get(form_data.username)
+    if not user_dict:
+        raise HTTPException(status_code = 400, detail="Incorrect username or password")
+    user = UserInDB(**user_dict)
+    hashed_password = fake_hash_password(form_data.password)
+    if hashed_password != user.hashed_password:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    # retornar token ( falso, en este caso username )
+    return {
+        "access_token": user.username,
+        "token_type":"bearer"
+    }
 
 @app.get("/users/me")
 async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
