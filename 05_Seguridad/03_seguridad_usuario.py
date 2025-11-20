@@ -47,6 +47,28 @@ fake_users_db: dict={
 }
 
 
+def fake_hash_password(password:str) -> str:
+    return "fakehashed" + password
+
+def get_user(db: dict, username: str) -> UserInDB | None:
+    if username in db:
+        return UserInDB(**db["username"]) # **db... desestructuració per mostrar les dades de User
+    return None
+
+def fake_decode_token(token:str) -> UserInDB | None:
+    return get_user(fake_users_db, token)
+
+
+async def get_current_user(token: Annotated[str,Depends(oauth2_scheme)]):
+    user = fake_decode_token(token)
+    return user
+
+@app.get("/users/me")
+async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+    return current_user
+
+
+
 
 @app.get("/items")
 async def get_items(token: Annotated[str,Depends(oauth2_scheme)]):
