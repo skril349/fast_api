@@ -66,6 +66,11 @@ async def get_current_user(token: Annotated[str,Depends(oauth2_scheme)]):
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     return user
 
+async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
+    if current_user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
 
 @app.post("/token")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
@@ -83,9 +88,13 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     }
 
 @app.get("/users/me")
-async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
+async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
 
+
+# Login(FormData(username, password) --> FastAPI(POST a la ruta "/token"))
+# Explorador recibe token --> lo guarda
+# get("/users/me") --> token dentro de header authorization Bearer <token>
 
 
 
