@@ -6,12 +6,18 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from passlib.context import CryptContext
+from dotenv import load_dotenv
+import os 
 
 # CONFIG (.env)
-SECRET_KEY = "99841f84c2055e0f75249901d6cd9639"
+SECRET_KEY = "mysecretkey"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY", SECRET_KEY)
+ALGORITHM = os.getenv("ALGORITHM", ALGORITHM)
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", ACCESS_TOKEN_EXPIRE_MINUTES))
 # Hash password
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
