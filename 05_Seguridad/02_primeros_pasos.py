@@ -19,3 +19,4 @@ oauth2_scheme : OAuth2PasswordBearer = OAuth2PasswordBearer(tokenUrl = "token") 
 @app.get("/items")
 async def get_items(token: Annotated[str,Depends(oauth2_scheme)]):
     return { " token": token}
+
