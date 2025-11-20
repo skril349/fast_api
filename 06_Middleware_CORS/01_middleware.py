@@ -8,16 +8,27 @@ app = FastAPI()
 
 # Middleware example
 
+# @app.middleware("http")
+# async def add_process_time_header(request: Request, call_next: Callable) -> Response:
+#     start_time = time.perf_counter()
+#     response: Response = await call_next(request)
+#     process_time = time.perf_counter() - start_time
+#     response.headers["X-Process-Time"] = str(process_time)
+#     return response
+
 @app.middleware("http")
-async def add_process_time_header(request: Request, call_next: Callable) -> Response:
-    start_time = time.perf_counter()
+async def first_middleware(request: Request, call_next: Callable) -> Response:
+    print("Before request - First Middleware")
     response: Response = await call_next(request)
-    process_time = time.perf_counter() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
+    print("After request - First Middleware")
     return response
 
-
-
+@app.middleware("http")
+async def second_middleware(request: Request, call_next: Callable) -> Response:
+    print("Before request - Second Middleware")
+    response: Response = await call_next(request)
+    print("After request - Second Middleware")
+    return response
 
 @app.get("/")
 async def root():
