@@ -1,7 +1,15 @@
 from fastapi import FastAPI, Depends, HTTPException
-from typing import Annotated
+from typing import Annotated, Optional
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class User(BaseModel):
+    id: int
+    nombre:str
+    email: str
+    edad: int | None = None
+    activo: Optional[bool]
 
 class AuthService:
     def authenticate(self, token:str):
@@ -52,3 +60,16 @@ def get_secure_data(token:str, auth_service: auth_service_dependency):
         return "authenticated"
     else:
         return "unauthenticated"
+    
+
+@app.post("/users/")
+async def create_user(user:User):
+    return {
+        "mensaje": f"Usuario {user.nombre.capitalize()} creado exitosamente",
+        "datos":user
+
+    }
+
+@app.put("users/{user_id}")
+async def edit_user(user_id:int, user:User):
+    return {"user_id":user_id,**user.model_dump()}
